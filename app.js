@@ -1,6 +1,6 @@
 const divPostContainer = document.querySelector('#posts-container');
 const divLoader = document.querySelector('.loader');
-const inputValid = document.querySelector('#filter');
+const inputFilter = document.querySelector('#filter');
 let page = 1;
 let idPage = 0;
 
@@ -10,12 +10,8 @@ const getPosts = async () => {
     console.log(page);
     return response.json();
 }
-const postTemplateInsertion = () => {
-
-}
 const addPostsInDOM = async () => {
     const data = await getPosts();
-
     const postTemplate = data.map(({title, body}) => {
         idPage++;
         return `<div class="post">
@@ -44,24 +40,6 @@ window.addEventListener('scroll', e => {
         showLoading();
     }
 }) 
-window.addEventListener('input', e => {
-    //input-> toda vez que o valor de input for mudado
-    const valueOfSearch = e.target.value;
-    const valueOfFields = document.querySelectorAll('.post');
-
-    console.log(filterFields(valueOfSearch, valueOfFields)
-    .map(el => el.innerHTML)
-    .map(el => {
-        return el.split('')
-        .splice(0, 0, '<div class="post">')
-        .splice(el.length - 1, 0, "</div>")
-        .join('')
-    })
-   )
-    // divPostContainer.innerHTML = filterFields(valueOfSearch, valueOfFields)
-                                                                        // .map(el => el.innerHTML)
-                                                                        // .join('');
-})
 const showLoading = () => {
     divLoader.classList.add('show');
     removeShow();
@@ -76,16 +54,17 @@ const getNewPosts = () => {
     page++;
     addPostsInDOM();
 }
-const filterFields = (valorPesquisa = '', ValorCampos) => {
-    return Array.from(ValorCampos).filter( element => {
-           
-        const elementNumber = element.querySelector('.number');
-        const elementTitle = element.querySelector('.post-title');
-        const elementBody = element.querySelector('.post-body');
+inputFilter.addEventListener('input', e => {
+    //input-> toda vez que o valor de input for mudado
+    const searchValue = e.target.value.toLowerCase();
+    const posts = document.querySelectorAll('.post');
+    
+    posts.forEach(el => {
+        const postTitle = el.querySelector('.post-title').textContent.toLowerCase();
+        const postBody = el.querySelector('.post-body').textContent.toLowerCase();
 
-        if (elementNumber.textContent.includes(valorPesquisa) || elementBody.textContent.includes(valorPesquisa) ||
-            elementTitle.textContent.includes(valorPesquisa)) {
-            return element;
+        if(!(postTitle.includes(searchValue) || postBody.includes(searchValue))) {
+            el.style.display = 'none';
         }
     })
-}
+})
