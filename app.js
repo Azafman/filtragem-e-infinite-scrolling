@@ -63,11 +63,7 @@ const changeInSearchField = e => {
      
      posts.forEach(filterPostsHTML(searchValue));
 }
-
-addPostsInDOM();
-
-inputFilter.addEventListener('input',changeInSearchField);
-window.addEventListener('scroll', e => {
+const scrollEvent = e => {
      // clientHeight -> altura visivel total do documento 
      // scrollTop -> distância entre o topo do documento e o topo visível da página
      // scrollHeight -> altura total do documento, incluindo as partes não visíveis  
@@ -78,4 +74,17 @@ window.addEventListener('scroll', e => {
      if(almostEndPage) { 
          showLoading();
      }
- }) 
+}
+
+addPostsInDOM();
+
+inputFilter.addEventListener('input', changeInSearchField);
+window.addEventListener('scroll', scrollEvent);
+
+/*
+ Boas práticas:
+ Deixe o código separa em partes -> 
+ - declaração de variáveis -> separação entre let e const
+ - evite expressões if muito grandes, use por exemplo códigos como os da linha 50
+ - Dê bons nomes às funções. Nomes que representam o que elas fazem. Dica: faça uma pré-lista de 4 nomes candidatos, e por último escolha o nome que mais representa o papel da função.
+*/
